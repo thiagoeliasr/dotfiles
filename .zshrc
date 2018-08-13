@@ -67,6 +67,7 @@ plugins=(
   git,
   osx,
   dotenv
+  colored-man-pages
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -99,3 +100,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+#
+alias vim="nvim"
+alias vi="nvim"
+
+source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
