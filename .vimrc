@@ -9,7 +9,7 @@ if has('vim_starting')
 endif
 
 " install vim
-let vimplug_exists=expand('~/.vim/autoload/plug.vim') 
+let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 if !filereadable(vimplug_exists)
 	echo "Installing Vim-Plug..."
 	echo ""
@@ -20,7 +20,7 @@ if !filereadable(vimplug_exists)
 endif
 
 " install on neovim
-let nvimplug_exists=expand('~/.local/share/nvim/site/autoload/plug.vim') 
+let nvimplug_exists=expand('~/.local/share/nvim/site/autoload/plug.vim')
 if !filereadable(nvimplug_exists)
 	echo "Installing Vim-Plug..."
 	echo ""
@@ -50,7 +50,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-scripts/grep.vim'
 Plug 'jiangmiao/auto-pairs'
-Plug 'editorconfig/editorconfig-vim' 
+Plug 'editorconfig/editorconfig-vim'
 Plug 'arnaud-lb/vim-php-namespace'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'mattn/emmet-vim'
@@ -101,7 +101,7 @@ set binary
 set hid
 
 "" Disable showmode
-set noshowmode 
+set noshowmode
 
 "" Fix backspace indent
 set backspace=indent,eol,start
@@ -145,7 +145,7 @@ set clipboard=unnamedplus "share transfer area to copy/past/cut
 "___________________________________________________
 
 syntax on
-set ruler 
+set ruler
 set number
 " set relativenumber
 set wildmenu
@@ -154,7 +154,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.tar.*
 
 set background=light
 
-let no_buffers_menu=1 
+let no_buffers_menu=1
 
 set mousemodel=popup
 set t_Co=256
@@ -179,7 +179,7 @@ set title
 set titleold="Terminal"
 set titlestring=%F
 
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\ 
+set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 if exists("*fugitive#statusline")
 	set statusline+=%{fugitive#statusline()}
 endif
@@ -190,11 +190,10 @@ set ai
 "Smart indent
 set si
 
-"if exists('+colorcolumn')
-"  set colorcolumn=80
-"else
-"  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-"endif
+if exists('+colorcolumn')
+	set colorcolumn=80
+	highlight ColorColumn ctermbg=0 guibg=lightgrey
+endif
 
 
 " 5. Plugin Settings
@@ -240,14 +239,14 @@ let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
 "" The Silver Searcher
 if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
+	" Use ag over grep
+	set grepprg=ag\ --nogroup\ --nocolor
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+	" Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
-  " " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
+	" " ag is fast enough that CtrlP doesn't need to cache
+	let g:ctrlp_use_caching = 0
 endif
 
 "" EditorConfig
@@ -439,6 +438,9 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Indent the whole buffer
 map <Leader>i mzgg=G`z
+
+" Removing unwanted trailing spaces when saving buffer
+autocmd BufWritePre * %s/\s\+$//e
 
 " open Tagbar
 map <F8> :TagbarOpenAutoClose<CR>
