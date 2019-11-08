@@ -1,5 +1,4 @@
 
-
 "  1. Vim Plug core
 "___________________________________________________
 
@@ -31,8 +30,6 @@ if !filereadable(nvimplug_exists)
 endif
 
 
-
-
 "  2. Plugins
 "___________________________________________________
 
@@ -56,12 +53,21 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'mattn/emmet-vim'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
-Plug 'w0rp/ale'
 Plug 'majutsushi/tagbar'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'posva/vim-vue'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+Plug 'storyn26383/vim-vue'
+Plug 'digitaltoad/vim-pug'
+Plug 'pangloss/vim-javascript'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'maralla/completor.vim', { 'do': 'pip install jedi' }
+Plug 'davidhalter/jedi-vim', { 'do': 'pip install jedi' }
+Plug 'leafgarland/typescript-vim'
+Plug 'quramy/tsuquyomi'
+Plug 'vim-syntastic/syntastic'
 
 if has('nvim')
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -137,7 +143,7 @@ if has('autocmd')
 endif
 
 "" Copy/Paste/Cut
-set clipboard=unnamedplus "share transfer area to copy/past/cut
+set clipboard=unnamed "share transfer area to copy/past/cut
 
 
 
@@ -147,7 +153,7 @@ set clipboard=unnamedplus "share transfer area to copy/past/cut
 syntax on
 set ruler
 set number
-" set relativenumber
+set relativenumber
 set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.tar.*
@@ -190,12 +196,6 @@ set ai
 "Smart indent
 set si
 
-if exists('+colorcolumn')
-	set colorcolumn=80
-	highlight ColorColumn ctermbg=0 guibg=lightgrey
-endif
-
-
 " 5. Plugin Settings
 "___________________________________________________
 
@@ -235,22 +235,25 @@ let g:neosnippet#snippets_directory='~/.vim/snippets'
 let g:neosnippet#enable_snipmate_compatibility = 1
 
 "" CtrlP - Ignore files
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
 
 "" The Silver Searcher
 if executable('ag')
-	" Use ag over grep
-	set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
 
-	" Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
-	" " ag is fast enough that CtrlP doesn't need to cache
-	let g:ctrlp_use_caching = 0
+  " " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
 endif
 
 "" EditorConfig
-let g:EditorConfig_core_mode = 'external_command'
+" let g:EditorConfig_core_mode = 'external_command'
 
 "" netrw rules!
 "
@@ -264,10 +267,14 @@ let g:EditorConfig_core_mode = 'external_command'
 "   	D = deleting files or directories
 "
 let g:netrw_banner = 0
-let g:netrw_liststyle = 1 " use `i`  to change this value
-let g:netrw_browse_split = 4 " open file in previous window
-let g:netrw_winsize = 25
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
 let g:netrw_altv = 1
+let g:netrw_winsize = 25
+"augroup ProjectDrawer
+"  autocmd!
+" autocmd VimEnter * :Vexplore
+"ugroup END
 
 "" Startify
 let g:startify_lists = [
@@ -412,8 +419,8 @@ autocmd FileType go nmap <leader>r  <Plug>(go-run)
 autocmd FileType go nmap <leader>t  <Plug>(go-test)
 
 "" PHP
-autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
+"autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
+"autocmd FileType php noremap <Leader>u :call PhpInsertUse()<CR>
 
 "" Emmet
 autocmd FileType blade imap <Tab> <C-y>,
@@ -463,3 +470,81 @@ augroup vimrc-remember-cursor-position
 	autocmd!
 	autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
+
+let g:vue_disable_pre_processors = 1
+
+colo abstract
+set guifont=Inconsolata-g\ for\ Powerline:h12
+set nowrap
+set tags=tags
+
+" let g:phpcd_php_cli_executable = 'docker exec -it php72-apache php'
+let g:jedi#completions_enabled = 0
+
+"if exists('+colorcolumn')
+"  set colorcolumn=80
+"else
+"  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+"endif
+
+if exists('+colorcolumn')
+	set colorcolumn=80
+	highlight ColorColumn ctermbg=0 guibg=DarkSlateGray
+endif
+
+" Syntastic Options
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Set up the arrays to ignore for later
+if !exists('g:syntastic_html_tidy_ignore_errors')
+    let g:syntastic_html_tidy_ignore_errors = []
+endif
+
+if !exists('g:syntastic_html_tidy_blocklevel_tags')
+    let g:syntastic_html_tidy_blocklevel_tags = []
+endif
+
+" Try to use HTML5 Tidy for better checking?
+" installed it via homebrew, which puts it in this location
+let g:syntastic_html_tidy_exec = '/usr/local/bin/tidy'
+" which is better than the version which ships with mac,
+" /usr/bin/tidy/
+
+" Ignore ionic tags in HTML syntax checking
+" See http://stackoverflow.com/questions/30366621
+" ignore errors about Ionic tags
+let g:syntastic_html_tidy_ignore_errors += [
+      \ "<ion-",
+      \ "discarding unexpected </ion-"]
+" It's probably better to add ion-pane and the like to g:syntastic_html_tidy_blocklevel_tags, and only ignore the errors about attributes.
+
+" Angular's attributes confuse HTML Tidy
+let g:syntastic_html_tidy_ignore_errors += [
+      \ " proprietary attribute \"ng-"]
+
+" Angular UI-Router attributes confuse HTML Tidy
+let g:syntastic_html_tidy_ignore_errors += [
+      \ " proprietary attribute \"ui-sref"]
+
+" Angular in particular often makes 'empty' blocks, so ignore
+" this error. We might improve how we do this though.
+" See also https://github.com/scrooloose/syntastic/wiki/HTML:---tidy
+" specifically g:syntastic_html_tidy_empty_tags
+let g:syntastic_html_tidy_ignore_errors += ["trimming empty "]
+
+" Angular ignores
+let g:syntastic_html_tidy_blocklevel_tags += [
+      \ 'ng-include',
+      \ 'ng-form'
+      \ ]
+
+" Angular UI-router ignores
+let g:syntastic_html_tidy_ignore_errors += [
+      \ " proprietary attribute \"ui-sref"]
